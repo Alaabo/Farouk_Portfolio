@@ -1,0 +1,43 @@
+/* Custom CSS for the circle cursor */
+.scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .scrollbar-hide {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+        }
+.cursor-circle {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 200px;
+          height: 200px;
+          pointer-events: none;
+          border-radius: 50%;
+          background: white;
+          mix-blend-mode: difference;
+          transform: translate(-50%, -50%) scale(0);
+          transition: transform 0.2s ease-in-out;
+          z-index: 10;
+        }
+        
+        /* Hover effect to make the circle visible */
+        .group:hover .cursor-circle {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        
+        /* Move the circle with the cursor */
+        .group:hover .cursor-circle {
+          transition: none;
+        }
+        
+        .group:hover .cursor-circle {
+          animation: none;
+        }
+        
+        .group:hover {
+          cursor: none;
+        }
+        
+        

@@ -1,113 +1,181 @@
+"use client"
+import"./customCSS.css"
+import { useEffect, useRef, useState } from "react";
+import {items} from "../../public/data"
+import {AnimatePresence, motion} from "framer-motion"
+import plane from "../../public/plane.png"
+import character from "../../public/mainCharacter.png"
 import Image from "next/image";
-
+import TypingEffect from "@/component/TypingEffect";
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    const cursorCircle = document.querySelector(".cursor-circle") as HTMLElement;
+
+    const handleMouseMove = (e : MouseEvent) => {
+      const { clientX: x, clientY: y } = e;
+      cursorCircle.style.transform = `translate(${x}px, ${y}px) scale(1)`;
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+  const constraintsRef = useRef<HTMLDivElement | null>(null)
+  const [selectedId, setSelectedId] = useState("")
+   return (
+    <>
+      <div className="w-full h-screen snap-y snap-mandatory overflow-y-scroll scrollbar-hide">
+        <div className="snap-start relative group h-full w-full flex items-center justify-center  text-white text-2xl font-bold overflow-hidden">
+        <motion.div
+        className="absolute top-0 left-0 w-screen "
+        initial={{ x: 20 , y: '100vh' , rotate: "0deg" }} // Start off-screen
+        animate={{ x: "100vw", y: 0 ,rotate: "0deg"}} // Animate to on-screen position
+        transition={{ duration: 5, ease: 'linear' }} // Adjust duration as needed
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+        <Image src={plane} alt="farouk pic" width={500} height={500} className="transform scale-x-[-1]"/>
+          </motion.div>
+        <motion.div
+        className="absolute top-0 left-0 w-screen"
+        initial={{ x: '100vw', y: '130vh',rotate: "0deg" }} // Start off-screen
+        animate={{ x: 0 , y: -60 , rotate: "6deg"}} // Animate to on-screen position
+        transition={{ duration: 7, ease: 'linear' }} // Adjust duration as needed
+          >
+        <Image src={plane} alt="farouk pic" width={300} height={300} />
+          </motion.div>
+        <motion.div
+        className="absolute top-0 left-0 w-screen"
+        initial={{ x: '100vw', y: '100vh',rotate: "0deg" }} // Start off-screen
+        animate={{ x:"50vw" , y: "30vh" , rotate: "6deg"}} // Animate to on-screen position
+        transition={{ duration: 5, ease: 'linear' }} // Adjust duration as needed
+          >
+        <Image src={plane} alt="farouk pic" width={300} height={300} className="transform lg:w-[700px]  scale-x-[1]"/>
+          </motion.div>
+        
+        <div className="flex flex-col justify-end p-2">
+        <h1 className="font-black md:text-9xl lg:text-[220px] text-8xl">
+        <TypingEffect text="Hi i am Farouk" speed={150}/>
+        </h1>
+        
+        <h1 className="md:text-4xl lg:text-7xl">a humble video editor</h1>
         </div>
+        
+        <div className="cursor-circle"></div>
       </div>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+        
+      <motion.div className={"snap-start bg-white flex justify-start items-center flex-col h-full w-full"} ref={constraintsRef}>
+        <motion.div
+          className=" h-[100px] w-[400px] flex-center"
+          drag
+          dragConstraints={constraintsRef}
+        >
+        <h1 className="text-6xl font-black text-center text-black">Biography</h1>
+        </motion.div>
+        <motion.div
+          className="bg-black rounded-xl h-[50vh] w-[360px] flex justify-start items-center flex-col"
+          drag
+          dragConstraints={constraintsRef}
+        >
+          <Image src={character} alt="character" className=" top-1/2 left-1/2 border-white border-4 content-center rounded-full w-[130px] h-[130px]"/>
+          <h1 className="text-3xl font-black text-center mx-2 w-full ">Maddani Farouk</h1>
+          <h1 className="text-xl font-medium text-center mx-2 w-full ">&quot; I believe in the power of Decipline&quot;</h1>
+          <p className="text-xl font-medium text-center mx-2 w-full ">LoremIpsumDelore lorem ipsum The Brown Fox jumped over the box for several times before he landed on his  </p>
+          <p className="text-xl font-medium text-center mx-2 w-full ">LoremIpsumDelore lorem ipsum The Brown Fox jumped over the box for several times before he landed on his feets </p>
+        </motion.div>
+        <motion.div
+          className="text-black h-[100px] w-[210px] flex-center"
+          drag
+          dragConstraints={constraintsRef}
+        >
+        <h1 className="text-xl mx-2 w-full text-center font-bold ">Tech i use on the duty</h1>
+        </motion.div>
+        <motion.div
+          className="border-black mb-4 p-2 border-2 rounded-xl h-[68px] w-[360px] flex justify-around"
+          drag
+          dragConstraints={constraintsRef}
+        >
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+        </motion.div>
+        <motion.div
+          className="border-black my-4 p-2 border-2 rounded-xl h-[68px] w-[360px] flex justify-around"
+          drag
+          dragConstraints={constraintsRef}
+        >
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+        </motion.div>
+        <motion.div
+          className="border-black my-4 p-2 border-2 rounded-xl h-[68px] w-[360px] flex justify-around"
+          drag
+          dragConstraints={constraintsRef}
+        >
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+          <div className="bg-black rounded-xl w-[64px] h-[64px] flex-center"></div>
+        </motion.div>
+      </motion.div>
+
+
+      <div className=" snap-start p-6 bg-black min-h-screen">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.map((item) => (
+            <motion.div
+              key={item.id}
+              layoutId={item.id.toString()}
+              onClick={() => setSelectedId(item.id)}
+              className="p-4 bg-white rounded-lg shadow-lg cursor-pointer hover:scale-105 transform transition duration-300 ease-in-out"
+            >
+              <motion.h5 className="text-sm font-semibold text-gray-500">
+                {item.subtitle}
+              </motion.h5>
+              <motion.h2 className="text-xl font-bold text-gray-800 mt-2">
+                {item.title}
+              </motion.h2>
+            </motion.div>
+          ))}
+        </div>
+
+        <AnimatePresence>
+          {selectedId && (
+            <motion.div
+              layoutId={selectedId.toString()}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            >
+              {items
+                .filter((item) => item.id === selectedId)
+                .map((item) => (
+                  <motion.div
+                    key={item.id}
+                    className="p-6 bg-white rounded-lg shadow-lg w-full h-1/2 xl:h-2/3 xl:w-2/3 text-center"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                  >
+                    <iframe className="w-full h-full" src={item.link} title="YouTube video player" allowFullScreen={true}  allow="fullscreen , accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"  ></iframe>
+                    <motion.h5 className="text-sm font-semibold bg-white text-gray-500">
+                      {item.subtitle}
+                    </motion.h5>
+                    <motion.h2 className="text-2xl font-bold bg-white text-gray-800 mt-2">
+                      {item.title}
+                    </motion.h2>
+                    <motion.button
+                      onClick={() => setSelectedId("")}
+                      className="mt-4 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300"
+                    >
+                      Close
+                    </motion.button>
+                  </motion.div>
+                ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
       </div>
-    </main>
-  );
+    </>
+  )
 }
